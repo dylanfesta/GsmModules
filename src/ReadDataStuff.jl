@@ -1,11 +1,12 @@
 
 module ReadDataStuff
-export  list_matfiles, list_matfile_content,get_matfile_variable, matlab_to_dataframe
+export  list_matfiles, list_matfile_content,read_matfile_variable, matlab_to_dataframe
 using MAT , DataFrames, CategoricalArrays
 
 global dir_read = "./"
 
 function set_dir(newdir)
+    println("setting files directory to $newdir")
     global dir_read = newdir
 end
 
@@ -22,7 +23,7 @@ function list_matfile_content(file)
     end
 end
 
-function get_matfile_variable(file,variable;data_function=nothing)
+function read_matfile_variable(file,variable;data_function=nothing)
     full_path=joinpath(dir_read,file)
     @assert isfile(full_path) ("File not found in "*(full_path))
     out = matopen(full_path,"r") do f
