@@ -1,6 +1,6 @@
 module GsmModules
 
-include("./ReadDataStuff")  # module ReadDataStuff
+include("./ReadDataStuff.jl")  # module ReadDataStuff
 
 
 end # module GsmModules
