@@ -1,12 +1,12 @@
 
 module FitsFanoFactor
-
+using Statistics, StatsBase
 """
 Assuming the data comes from a Poisson
 process, computes the error over the
 variance (the var itself is equal to the mean)
 """
-function poisson_var_error(data::Vector{<:AbstractFloat})
+function poisson_var_error(data::Vector{<:Real})
     n=length(data)
     n==0 && return 0.0
     nu=mean(data)
@@ -25,7 +25,7 @@ end
 Returns Fano factor of data
 and associated error (by propagation)
 """
-function fano_factor_err(data::Vector{<:AbstractFloat})
+function fano_factor_err(data::Vector{<:Real})
     n = length(data)
     mu=mean(data)
     mu == 0.0 && return (0.,0.)
@@ -38,25 +38,48 @@ function fano_factor_err(data::Vector{<:AbstractFloat})
     Δff = sqrt(  (Δsigm2)^2 / mu^2 + (Δmu)^2*sigm2^2/mu^4 )
     (ff,Δff)
 end
-
-function fano_factor_err(data::Matrix{<:AbstractFloat})
+function fano_factor_err(data::Matrix{<:Real})
     out = mapslices(data;dims=1) do v
         fano_factor_err(v)
-    end 
-    [o[1] for o in out], [o[2] for o in out]
+    end
+    [o[1] for o in out][:], [o[2] for o in out][:]
+end
+function fano_factor_err(data::Vector{V}) where V<:Vector{<:Real}
+    fano_factor_err(hcat(data...))
 end
 
+function weighted_dumb_linear_regression(x::V,y::V,w::V) where V<:Vector{<:Real}
+    n = length(x)
+    @assert n == length(y) == length(w)
+    @assert all(w.>0)
+    sqw = sqrt.(w)
+    _x = x .* sqw
+    _y = y .* sqw
+    coef = mean( _x .* _y ) / mean( _x .* _x )
+    s_err = let
+        err = _y .- (coef .* _x)
+        mom = sum( (_x .- mean(_x)).^2 )
+        sqrt(sum(err.^2)/(n-2)/mom)
+    end
+    coef,s_err
+end
 
-# """
-# coef, confidence_interval = weighted_linear_regr(mahdata)
-# mahdata is a dataframe with fields x, y and weights
-# """
-# function weighted_linear_regr(mahdata)
-#     o = glm(@formula(y~0+x), mahdata , Normal(), IdentityLink() , wts=mahdata[:weights])
-#     coef(o)[1], confint(o)
-# end
+# spike counts are necessary to compute the error!
+function fano_factor_population(spike_counts::Vector{V};useweights=true) where V<:Vector{<:Real}
+    x = mean.(spike_counts)
+    y = var.(spike_counts)
+    weights = if !useweights
+        fill!(similar(x),1.0)
+        else
+        inv.(poisson_var_error.(spike_counts))
+    end
+    # cut weights that are too high. It probably refers to bad data
+    wcut = quantile(weights,0.95)
+    map!(ww->min(ww,wcut), weights, weights)
+    regr = weighted_dumb_linear_regression(x,y,weights)
+    (regr... , x, y)
+end
 
-#
 # """
 #  fano_fact, confidence_interval, means, vars  = population_fano_factor(spike_counts::Vector{Vector{Number}})
 # """
