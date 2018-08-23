@@ -68,10 +68,10 @@ end
 function fano_factor_population(spike_counts::Vector{V};useweights=true) where V<:Vector{<:Real}
     x = mean.(spike_counts)
     y = var.(spike_counts)
-    weights = if !useweights
-        fill!(similar(x),1.0)
+    weights = if useweights
+            inv.(poisson_var_error.(spike_counts))
         else
-        inv.(poisson_var_error.(spike_counts))
+            fill!(similar(x),1.0)
     end
     # cut weights that are too high. It probably refers to bad data
     wcut = quantile(weights,0.95)
