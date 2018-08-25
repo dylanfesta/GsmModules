@@ -68,14 +68,16 @@ end
 function fano_factor_population(spike_counts::Vector{V};useweights=true) where V<:Vector{<:Real}
     x = mean.(spike_counts)
     y = var.(spike_counts)
-    weights = if useweights
-            inv.(poisson_var_error.(spike_counts))
+    weights =
+        if useweights
+            var_err = 3.0 .* poisson_var_error.(spike_counts)
+            err_cut = maximum(var_err)/ 50.0 #error range allowed
+            map!(v-> inv(max(v,err_cut)) , var_err,var_err)
         else
             fill!(similar(x),1.0)
     end
     # cut weights that are too high. It probably refers to bad data
-    wcut = quantile(weights,0.95)
-    map!(ww->min(ww,wcut), weights, weights)
+    # @show extrema(weights)
     regr = weighted_dumb_linear_regression(x,y,weights)
     (regr... , x, y)
 end
