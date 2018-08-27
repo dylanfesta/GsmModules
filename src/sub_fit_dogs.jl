@@ -9,17 +9,12 @@ using JuMP, Random
 using Statistics, StatsBase, Distributions
 
 
-type DiffOfSimgs{F}
+struct DiffOfSimgs{F}
     baseline::F
     gain_p::F
     steep_p::F
     gain_m::F
     steep_m::F
-end
-
-
-function get_baseline(c::SigmsCurve)
-    c.baseline
 end
 
 function (sc::DiffOfSimgs)()
@@ -54,7 +49,7 @@ end
 #     make(c).(x_vals) + rand(noise_dist,length(x_vals))
 # end
 
-function find_max(c::SigmsCurve)
+function find_max(c::DiffOfSimgs)
     f = c()
     df(x)= ForwardDiff.derivative(f,x)
     _max = try
