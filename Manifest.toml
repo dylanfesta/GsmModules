@@ -138,10 +138,10 @@ deps = ["Random"]
 uuid = "9fa8497b-333b-5362-9e8d-4d0656e87820"
 
 [[HDF5]]
-deps = ["BinDeps", "Blosc", "Compat", "Homebrew", "Libdl", "Pkg", "WinRPM"]
-git-tree-sha1 = "6e1cd8a2a71fe223ceccd8779b43a7daf006db9e"
+deps = ["BinDeps", "Blosc", "Distributed", "Homebrew", "Libdl", "LinearAlgebra", "Pkg", "Test", "WinRPM"]
+git-tree-sha1 = "2407ec97bdb872ed0d569ff8e592c7a5d60675bc"
 uuid = "f67ccb44-e63f-5c2f-98bd-6dc0ccc4ba2f"
-version = "0.9.4"
+version = "0.10.0"
 
 [[HTTPClient]]
 deps = ["Compat", "LibCURL"]
@@ -209,10 +209,10 @@ uuid = "23992714-dd62-5051-b70f-ba57cb901cac"
 version = "0.4.0"
 
 [[MATLAB]]
-deps = ["Compat"]
-git-tree-sha1 = "9a25e90f59548c641d379ca7f8ab03ec4f515109"
+deps = ["Libdl", "SparseArrays", "Test"]
+git-tree-sha1 = "323855e9927706cba0fba649be9ffb44e3874d3c"
 uuid = "10e44e05-a98a-55b3-a45b-ba969058deb6"
-version = "0.6.2"
+version = "0.7.0"
 
 [[Markdown]]
 deps = ["Base64"]
@@ -232,6 +232,12 @@ version = "0.2.10"
 
 [[Mmap]]
 uuid = "a63ad114-7e13-5084-954f-fe012c677804"
+
+[[NLopt]]
+deps = ["BinaryProvider", "CMakeWrapper", "Libdl", "MathProgBase", "Test"]
+git-tree-sha1 = "b46237debcacd4fed7bbeb31200667a75b90384f"
+uuid = "76087f3c-5699-56af-9a33-bf431cd00edd"
+version = "0.5.1"
 
 [[NaNMath]]
 deps = ["Compat"]
@@ -377,6 +383,6 @@ version = "0.5.2"
 
 [[WinRPM]]
 deps = ["BinDeps", "Compat", "HTTPClient", "LibExpat", "Libdl", "Libz", "SHA", "URIParser"]
-git-tree-sha1 = "023faa2430b4ad3f9cf073c03cf100d80630fb6d"
+git-tree-sha1 = "3ff6d7ad07dc216d5fc8e70ac994a6d6bb46347c"
 uuid = "c17dfb99-b4f7-5aad-8812-456da1ad7187"
-version = "0.4.0"
+version = "0.4.1"
