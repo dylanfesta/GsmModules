@@ -16,8 +16,8 @@ width = 0.1
 xs,ys,zs = let
     xsg = LinRange(0,2,200)
     ysg = LinRange(0,-2,200)
-    _ys = rand(ysg,200)
     _xs = rand(xsg,200)
+    _ys = rand(ysg,200)
     _zs = F.response_distribution.(_xs,_ys,offset,xc,yc,gain,width)
     (_xs,_ys,_zs)
 end
