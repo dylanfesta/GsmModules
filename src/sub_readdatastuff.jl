@@ -92,7 +92,7 @@ function matlab_matrix_to_dataframe(mat_matrix,mat_fields,value_name,
     #preallocate :-3
     vals = value_fun.(mat_matrix)
     n =  sum( .!ismissing.(vals) )
-    println("the database will have $n rows", n)
+    println("the database will have $n rows")
     # prepare  cols
     cols_fields = [ Vector{eltype(v)}(undef,n) for v in field_vects ]
     col_value = Vector{value_type}(undef,n)

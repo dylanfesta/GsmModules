@@ -44,5 +44,4 @@ function fit_receptive_field(x_data,y_data,z_data,guess, min_width::Float64)
 end
 
 
-
 end # of module
