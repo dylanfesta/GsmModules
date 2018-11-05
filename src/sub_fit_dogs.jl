@@ -5,8 +5,8 @@ Fitting difference of gaussians
 =#
 
 module FitDiffOfSigms
-using JuMP, Random
-using Statistics, StatsBase, Distributions
+# using JuMP
+using Random, Statistics, StatsBase, Distributions
 
 
 struct DiffOfSimgs{F}
