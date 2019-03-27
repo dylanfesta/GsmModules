@@ -29,7 +29,7 @@ function fano_factor_err(data::Vector{<:Real})
     n = length(data)
     mu=mean(data)
     mu == 0.0 && return (0.,0.)
-    @assert mu > 0
+    @assert mu > 0 "negative value! mu = $mu"
 
     sigm2=var(data)
     Δmu = sqrt(sigm2/n)
